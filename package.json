@@ -1,0 +1,60 @@
+{
+  "name": "fandom.js",
+  "version": "1.1.0",
+  "description": "A powerful library to interact with the Fandom + MediaWiki APIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "authors": [
+    "Ferotiq <evanrayweigel@outlook.com>",
+    "Jonas Franke <me@byjonas.dev>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wingsoffirewiki/fandom.js.git"
+  },
+  "homepage": "https://fandom.js.org",
+  "bugs": {
+    "url": "https://github.com/wingsoffirewiki/fandom.js/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "library",
+    "wikimedia",
+    "fandom",
+    "fandom-wiki",
+    "fandomjs"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "pnpm run test:types && vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "pnpm run test:types && vitest run --coverage",
+    "test:ci": "pnpm run test:types && vitest run --coverage --reporter=dot",
+    "test:types": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsc -w",
+    "prepare": "pnpm build",
+    "prepublishOnly": "pnpm build",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "cross-fetch": "^4.1.0",
+    "eventemitter3": "^5.0.1",
+    "lru-cache": "^11.2.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@types/node": "^24.10.0",
+    "@vitest/coverage-v8": "4.0.8",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
+  }
+}
