@@ -1,0 +1,50 @@
+---
+title: Getting Started
+description: Install, initialize, and make your first request with fandom.js.
+---
+
+# Getting Started
+
+## Installation
+
+Install via your preferred package manager:
+
+```bash
+pnpm add fandom.js
+# or
+npm install fandom.js
+# or
+yarn add fandom.js
+```
+
+## Minimal Usage
+
+```ts
+import { Client } from 'fandom.js';
+
+const client = new Client({
+  site: 'minecraft.fandom.com',
+});
+
+const page = await client.pages.getByTitle('Creeper');
+console.log(page.title, page.id);
+```
+
+## Authentication (optional)
+
+Some endpoints require tokens. Provide a `token` or credentials via environment or constructor:
+
+```ts
+const client = new Client({
+  site: 'your-wiki.fandom.com',
+  token: process.env.FANDOM_TOKEN,
+});
+```
+
+See ./client for full client configuration.
+
+## Next Steps
+
+- Explore ./client and ./managers
+- Learn how concurrency is controlled in ./rate-limiter
+- Browse domain models in ./structures

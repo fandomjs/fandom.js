@@ -1,0 +1,31 @@
+---
+title: Rate Limiter
+description: Concurrency control, queues, and backpressure.
+---
+
+# Rate Limiter
+
+Ensures safe concurrency across all managers using token buckets and queues.
+
+## Configuration
+
+```ts
+const client = new Client({
+  site: 'example.fandom.com',
+  rateLimiter: {
+    maxConcurrent: 8,
+    minDelayMs: 100,
+  },
+});
+```
+
+## Behavior
+
+- Prevents API abuse and bans
+- Smooths bursts via minimal delay
+- Integrates with retries/backoff
+
+## Tips
+
+- Use conservative limits when multithreading
+- Prefer batching Reads over Writes

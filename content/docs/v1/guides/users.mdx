@@ -1,0 +1,11 @@
+---
+title: Users Guide
+description: Lookup users and their contributions.
+---
+
+# Users Guide
+
+```ts
+const user = await client.users.getByName('Notch');
+const contribs = await client.users.getContributions(user.id);
+```

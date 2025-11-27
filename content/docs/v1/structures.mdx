@@ -1,0 +1,23 @@
+---
+title: Structures Overview
+description: Page, Revision, and User structures with key fields.
+---
+
+# Structures
+
+## Page
+- `id`: number
+- `title`: string
+- `url`: string
+- `namespace`: enum
+
+## Revision
+- `id`: number
+- `pageId`: number
+- `timestamp`: string
+- `userId`: number | null
+
+## User
+- `id`: number
+- `name`: string
+- `groups`: string[]

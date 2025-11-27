@@ -1,0 +1,25 @@
+---
+title: Errors
+description: Error model, retryable failures, and handling patterns.
+---
+
+# Errors
+
+All failures throw `ApiError` with:
+
+- `code`: string | number
+- `message`: string
+- `status`: number
+- `cause`: unknown | undefined
+
+## Handling
+
+```ts
+try {
+  const page = await client.pages.getById(123);
+} catch (err) {
+  if (err.name === 'ApiError') {
+    // inspect err.status, err.code
+  }
+}
+```

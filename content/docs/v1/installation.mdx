@@ -1,0 +1,36 @@
+---
+title: Installation
+description: Supported environments, package managers, and TypeScript setup.
+---
+
+# Installation
+
+## Requirements
+
+- Node.js 18+ recommended
+- TypeScript 5+ for best DX
+
+## Install
+
+```bash
+pnpm add fandom.js
+```
+
+## TypeScript config
+
+Enable ES module resolution and `@types/node`:
+
+```json
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2020",
+    "strict": true
+  }
+}
+```
+
+## ESM/CommonJS
+
+The package publishes ESM. Use `type: module` or transpile with your bundler.

@@ -1,0 +1,38 @@
+---
+title: Client
+description: Client configuration, lifecycle, and primary methods.
+---
+
+# Client
+
+The `Client` orchestrates managers, request lifecycle, and authentication.
+
+```ts
+import { Client } from 'fandom.js';
+
+const client = new Client({
+  site: 'minecraft.fandom.com',
+  userAgent: 'my-app/1.0',
+  token: process.env.FANDOM_TOKEN,
+});
+```
+
+## Options
+
+- `site`: Base Fandom domain (e.g., `starwars.fandom.com`).
+- `token`: Optional token for protected endpoints.
+- `userAgent`: Identifies your application.
+- `request`: Partial config for the Request Manager.
+- `rateLimiter`: Overrides for concurrency/backoff.
+
+## Managers
+
+- `client.pages`: PageManager
+- `client.revisions`: RevisionManager
+- `client.search`: SearchManager
+- `client.users`: UserManager
+- `client.events`: EventManager
+- `client.categories`: CategoryManager
+- `client.meta`: MetaManager
+
+See ./managers for detailed APIs.

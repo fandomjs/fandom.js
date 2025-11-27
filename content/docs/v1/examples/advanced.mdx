@@ -1,0 +1,30 @@
+---
+title: Advanced
+description: Concurrency, events, and error handling combined.
+---
+
+# Advanced Example
+
+```ts
+import { Client } from 'fandom.js';
+
+const client = new Client({
+  site: 'minecraft.fandom.com',
+  rateLimiter: { maxConcurrent: 5 },
+  request: { retries: 2 },
+});
+
+const sub = client.events.subscribe({ type: 'recentchanges' }, (evt) => {
+  console.log('RC', evt.title);
+});
+
+try {
+  const pages = await client.search.query({ q: 'mob', limit: 10 });
+  for (const p of pages) {
+    const page = await client.pages.getByTitle(p.title);
+    console.log(page.id, page.title);
+  }
+} finally {
+  sub.unsubscribe();
+}
+```
