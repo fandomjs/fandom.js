@@ -11,16 +11,16 @@
   ],
   "authors": [
     "Ferotiq <evanrayweigel@outlook.com>",
-    "Jonas Franke <me@byjonas.dev>"
+    "ByJonas <me@binaryblazer.me>"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wingsoffirewiki/fandom.js.git"
+    "url": "git+https://github.com/fandomjs/fandom.js.git"
   },
   "homepage": "https://fandom.js.org",
   "bugs": {
-    "url": "https://github.com/wingsoffirewiki/fandom.js/issues"
+    "url": "https://github.com/fandomjs/fandom.js/issues"
   },
   "engines": {
     "node": ">=18"
