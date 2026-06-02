@@ -19,7 +19,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 11
+          version: 10.33.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.check_version.outputs.skip_publish == 'false'
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build
         if: steps.check_version.outputs.skip_publish == 'false'
