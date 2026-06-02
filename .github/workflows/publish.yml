@@ -13,34 +13,47 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 11
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "18"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
+      - name: Check if version is already published, if so skip the runner
+        id: check_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view fandom.js@$VERSION > /dev/null 2>&1; then
+            echo "Version $VERSION is already published. Skipping publish step."
+            echo "skip_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version $VERSION is not published yet. Proceeding with publish."
+            echo "skip_publish=false" >> $GITHUB_OUTPUT
+
+      - name: Update npm to latest version
+        if: steps.check_version.outputs.skip_publish == 'false'
+        run: npm i npm@latest --global
+
       - name: Install dependencies
+        if: steps.check_version.outputs.skip_publish == 'false'
         run: pnpm install
 
       - name: Build
+        if: steps.check_version.outputs.skip_publish == 'false'
         run: pnpm build
 
       - name: Publish (Latest)
-        if: github.event.release.prerelease == false
+        if: github.event.release.prerelease == false && steps.check_version.outputs.skip_publish == 'false'
         run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish (Next)
-        if: github.event.release.prerelease == true
+        if: github.event.release.prerelease == true && steps.check_version.outputs.skip_publish == 'false'
         run: npm publish --access public --tag next --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

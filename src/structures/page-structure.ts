@@ -7,6 +7,7 @@ import type {
   QueryParams,
   APIResponse,
   APIRevision,
+  PageImage,
 } from "../types/index.js";
 
 /**
@@ -37,6 +38,10 @@ export class Page extends BaseStructure<Partial<APIPage>> {
    * The categories the page belongs to.
    */
   public categories: string[] = [];
+  /**
+   * Cached images used by the page.
+   */
+  private imageCache?: PageImage[];
 
   /**
    * Creates a new instance of the Page.
@@ -169,6 +174,46 @@ export class Page extends BaseStructure<Partial<APIPage>> {
     return page.revisions.map(
       (rev: APIRevision) => new Revision(this.client, rev),
     );
+  }
+
+  /**
+   * Fetches images used by the page.
+   * @returns A Promise that resolves to image metadata for the page.
+   */
+  public async images(): Promise<PageImage[]> {
+    if (this.imageCache) return this.imageCache;
+
+    const res = await this.client.requestManager.get<
+      APIResponse<{ pages: Record<string, APIPage> }>
+    >({
+      action: "query",
+      generator: "images",
+      titles: this.title,
+      gimlimit: "max",
+      prop: "imageinfo",
+      iiprop: "url|mime|size",
+      format: "json",
+    });
+
+    const pages = res?.query?.pages || {};
+    const images = Object.values(pages).map((page) => {
+      const imageinfo = page.imageinfo?.[0];
+      return {
+        pageid: page.pageid,
+        ns: page.ns,
+        title: page.title,
+        url: imageinfo?.url,
+        descriptionurl: imageinfo?.descriptionurl,
+        mime: imageinfo?.mime,
+        size: imageinfo?.size,
+        width: imageinfo?.width,
+        height: imageinfo?.height,
+        imageinfo,
+      };
+    });
+
+    this.imageCache = images;
+    return images;
   }
 
   /**

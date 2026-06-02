@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CategoryManager } from "../src/managers/category-manager";
+import { PageManager } from "../src/managers/page-manager";
 import { MetaManager } from "../src/managers/meta-manager";
 import { SearchManager } from "../src/managers/search-manager";
 import { RevisionManager } from "../src/managers/revision-manager";
@@ -16,6 +17,9 @@ const mockClient = {
   requestManager: {
     get: requestManagerGetMock,
   },
+  events: {
+    emit: vi.fn(),
+  },
   options: {
     cacheSize: 100,
   },
@@ -24,6 +28,45 @@ const mockClient = {
 describe("Managers", () => {
   beforeEach(() => {
     requestManagerGetMock.mockReset();
+    vi.mocked(mockClient.events.emit).mockReset();
+  });
+
+  describe("PageManager", () => {
+    it("fetches pages without fetching images", async () => {
+      const pageManager = new PageManager(mockClient);
+      requestManagerGetMock.mockResolvedValue({
+        query: {
+          pages: {
+            "1": {
+              pageid: 1,
+              ns: 0,
+              title: "Test Page",
+              extract: "Summary",
+              revisions: [{ "*": "Content" }],
+              categories: [{ ns: 14, title: "Category:Test" }],
+            },
+          },
+        },
+      });
+
+      const page = await pageManager.fetch("Test Page");
+
+      expect(requestManagerGetMock).toHaveBeenCalledWith({
+        action: "query",
+        prop: "extracts|revisions|categories",
+        exintro: true,
+        explaintext: true,
+        rvprop: "content",
+        cllimit: "max",
+        redirects: true,
+        titles: "Test Page",
+        format: "json",
+      });
+      expect(requestManagerGetMock).not.toHaveBeenCalledWith(
+        expect.objectContaining({ generator: "images" }),
+      );
+      expect(page).toBeInstanceOf(Page);
+    });
   });
 
   describe("CategoryManager", () => {
