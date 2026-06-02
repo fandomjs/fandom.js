@@ -3,6 +3,7 @@ name: Publish Package
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -37,6 +38,7 @@ jobs:
           else
             echo "Version $VERSION is not published yet. Proceeding with publish."
             echo "skip_publish=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Update npm to latest version
         if: steps.check_version.outputs.skip_publish == 'false'
