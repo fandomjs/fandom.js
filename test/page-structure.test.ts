@@ -106,6 +106,84 @@ describe("Page Structure", () => {
     expect(history[0]).toBeInstanceOf(Revision);
   });
 
+  it("fetches page images lazily", async () => {
+    requestManagerGetMock.mockResolvedValue({
+      query: {
+        pages: {
+          "2": {
+            pageid: 2,
+            ns: 6,
+            title: "File:Example.png",
+            imageinfo: [
+              {
+                url: "https://static.wikia.nocookie.net/wiki/example.png",
+                descriptionurl:
+                  "https://example.fandom.com/wiki/File:Example.png",
+                mime: "image/png",
+                size: 1234,
+                width: 640,
+                height: 480,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    const images = await page.images();
+
+    expect(requestManagerGetMock).toHaveBeenCalledWith({
+      action: "query",
+      generator: "images",
+      titles: "Test Page",
+      gimlimit: "max",
+      prop: "imageinfo",
+      iiprop: "url|mime|size",
+      format: "json",
+    });
+    expect(images).toEqual([
+      {
+        pageid: 2,
+        ns: 6,
+        title: "File:Example.png",
+        url: "https://static.wikia.nocookie.net/wiki/example.png",
+        descriptionurl: "https://example.fandom.com/wiki/File:Example.png",
+        mime: "image/png",
+        size: 1234,
+        width: 640,
+        height: 480,
+        imageinfo: {
+          url: "https://static.wikia.nocookie.net/wiki/example.png",
+          descriptionurl: "https://example.fandom.com/wiki/File:Example.png",
+          mime: "image/png",
+          size: 1234,
+          width: 640,
+          height: 480,
+        },
+      },
+    ]);
+  });
+
+  it("caches fetched page images", async () => {
+    requestManagerGetMock.mockResolvedValue({
+      query: {
+        pages: {
+          "2": {
+            pageid: 2,
+            ns: 6,
+            title: "File:Example.png",
+            imageinfo: [{ url: "https://example.com/example.png" }],
+          },
+        },
+      },
+    });
+
+    await page.images();
+    await page.images();
+
+    expect(requestManagerGetMock).toHaveBeenCalledTimes(1);
+  });
+
   it("reverts to a revision", async () => {
     // Mock fetching current info
     requestManagerGetMock.mockResolvedValue({

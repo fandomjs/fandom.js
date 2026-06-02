@@ -15,6 +15,86 @@ export interface CategoryData {
 }
 
 /**
+ * Represents image info returned by the API.
+ */
+export interface APIImageInfo {
+  /**
+   * The image URL.
+   */
+  url?: string;
+  /**
+   * The image description page URL.
+   */
+  descriptionurl?: string;
+  /**
+   * The image MIME type.
+   */
+  mime?: string;
+  /**
+   * The image file size in bytes.
+   */
+  size?: number;
+  /**
+   * The image width in pixels.
+   */
+  width?: number;
+  /**
+   * The image height in pixels.
+   */
+  height?: number;
+  /**
+   * Allow other image info properties from the API.
+   */
+  [key: string]: unknown;
+}
+
+/**
+ * Represents an image used by a page.
+ */
+export interface PageImage {
+  /**
+   * The ID of the image page.
+   */
+  pageid?: number;
+  /**
+   * The namespace ID of the image page.
+   */
+  ns: number;
+  /**
+   * The file title of the image.
+   */
+  title: string;
+  /**
+   * The image URL.
+   */
+  url?: string;
+  /**
+   * The image description page URL.
+   */
+  descriptionurl?: string;
+  /**
+   * The image MIME type.
+   */
+  mime?: string;
+  /**
+   * The image file size in bytes.
+   */
+  size?: number;
+  /**
+   * The image width in pixels.
+   */
+  width?: number;
+  /**
+   * The image height in pixels.
+   */
+  height?: number;
+  /**
+   * Raw image info returned by the API.
+   */
+  imageinfo?: APIImageInfo;
+}
+
+/**
  * Represents a page object returned by the API.
  */
 export interface APIPage {
@@ -42,6 +122,10 @@ export interface APIPage {
    * The categories the page belongs to.
    */
   categories?: CategoryData[];
+  /**
+   * Image info for file pages.
+   */
+  imageinfo?: APIImageInfo[];
   /**
    * The ID of the last revision.
    */
