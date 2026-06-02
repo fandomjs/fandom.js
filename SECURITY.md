@@ -18,4 +18,4 @@ Tell them where to go, how often they can expect to get an update on a
 reported vulnerability, what to expect if the vulnerability is accepted or
 declined, etc.
 
-Please report vulnerabilities to [me@binaryblazer.me](mailto:me@binaryblazer.me) or open a draft security advisory on GitHub.
+Please report vulnerabilities to [me@byjonas.dev](mailto:me@byjonas.dev) or open a draft [security advisory](https://github.com/fandomjs/fandom.js/security/advisories) on GitHub.
