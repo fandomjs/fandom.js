@@ -36,7 +36,8 @@ import { Client } from "fandom.js";
 
 const client = new Client({
   host: "https://sonic.fandom.com",
-  apiPath: "/api.php",
+  apiPath: "/api.php", // API endpoint path (default: "/api.php")
+  polling: true, // Enable polling for events (if activated, the client will run endlessly and listen for events until stopped manually)
 });
 
 client.events.on("ready", () => {
@@ -51,6 +52,9 @@ async function main() {
   const page = await client.pages.fetch("Sonic_the_Hedgehog");
   console.log(`Title: ${page.title}`);
   console.log(`Extract: ${page.extract}`);
+
+  const images = await page.images();
+  console.log("Images:", images);
 
   // Search
   const results = await client.search.search("Tails");
